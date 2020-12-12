@@ -223,9 +223,7 @@ class ResNet_AT(nn.Module):
             if AT_level == 'second_level':
                 assert self.at_type == 'self_relation-attention'
                 vms = index_matrix.permute(1, 0).mm(vm)  # [381, 21783] -> [21783,381] * [381,512] --> [21783, 512]
-                print(vms.shape)
-                print(vectors.shape)
-                vs_cate = torch.cat([vectors, vms], dim=0)
+                vs_cate = torch.cat([vectors, vms], dim=1)
 
                 betas = self.beta(self.dropout(vs_cate))
                 ''' keywords: mean_fc ; weight_sourcefc; sum_alpha; weightmean_sourcefc '''
