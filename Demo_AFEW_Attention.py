@@ -59,7 +59,7 @@ def main():
     arg_listeval = './Data/CK+_Fold2.txt'
     arg_batchsize_eval= 64
 
-    train_loader, val_loader = load_materials.LoadAFEW(arg_rootTrain, arg_listTrain, arg_batchsize_train, arg_rooteval, arg_listeval, arg_batchsize_eval)
+    train_loader, val_loader = load_materials.Load_CKPlus(arg_rootTrain, arg_listTrain, arg_batchsize_train, arg_rooteval, arg_listeval, arg_batchsize_eval)
 
     ''' Load model '''
     _structure = Model.resnet18_AT(at_type=at_type)
