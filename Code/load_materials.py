@@ -48,16 +48,18 @@ def Load_CKPlus(root_train, list_train, batchsize_train, root_eval, list_eval, b
         video_root=root_train,
         video_list=list_train,
         rectify_label=CK_label,
-        transform=transforms.Compose([transforms.Resize(480, 480),
-                                      transforms.ToTensor()]),
+        transform=transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Resize(480, 480)]),
     )
 
     val_dataset = DebinMeng_train.VideoDataset(
         video_root=root_eval,
         video_list=list_eval,
         rectify_label=CK_label,
-        transform=transforms.Compose([transforms.Resize(480, 480),
-                                      transforms.ToTensor()]),
+        transform=transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Resize(480, 480)]),
         csv=False)
 
     train_loader = torch.utils.data.DataLoader(
