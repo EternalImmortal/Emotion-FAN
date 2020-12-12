@@ -115,7 +115,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
     end = time.time()
     for i, (input_first, target_first, input_second, target_second, input_third, target_third, index) in enumerate(train_loader):
 
-        target = target_first.cuda(async=True)
+        target = target_first.cuda(non_blocking=True)
         input_var = torch.autograd.Variable(torch.stack([input_first, input_second , input_third], dim=4))
         target_var = torch.autograd.Variable(target)
         # compute output
@@ -157,7 +157,7 @@ def train(train_loader, model, criterion, optimizer, epoch):
     for i in range(int(max(index_vector)) + 1):
         index_matrix.append(index_vector == i)
 
-    index_matrix = torch.stack(index_matrix, dim=0).cuda(async=True).float()  # [21570]  --->  [380, 21570]
+    index_matrix = torch.stack(index_matrix, dim=0).cuda(non_blocking=True).float()  # [21570]  --->  [380, 21570]
 
     output_store_fc = torch.cat(output_store_fc, dim=0)  # [256,7] ... [256,7]  --->  [21570, 7]
 
@@ -187,7 +187,7 @@ def validate(val_loader, model):
     with torch.no_grad():
         for i, (input_var, target, index) in enumerate(val_loader):
             # compute output
-            target = target.cuda(async=True)
+            target = target.cuda(non_blocking=True)
             input_var = torch.autograd.Variable(input_var)
             ''' model & full_model'''
             f, alphas = model(input_var, phrase = 'eval')
@@ -207,7 +207,7 @@ def validate(val_loader, model):
         for i in range(int(max(index_vector)) + 1):
             index_matrix.append(index_vector == i)
 
-        index_matrix = torch.stack(index_matrix, dim=0).cuda(async=True).float()  # [21570]  --->  [380, 21570]
+        index_matrix = torch.stack(index_matrix, dim=0).cuda(non_blocking=True).float()  # [21570]  --->  [380, 21570]
 
         output_store_fc = torch.cat(output_store_fc, dim=0)  # [256,7] ... [256,7]  --->  [21570, 7]
         output_alpha    = torch.cat(output_alpha, dim=0)     # [256,1] ... [256,1]  --->  [21570, 1]
