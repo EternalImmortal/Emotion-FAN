@@ -68,7 +68,7 @@ def Load_CKPlus(root_train, list_train, batchsize_train, root_eval, list_eval, b
     val_loader = torch.utils.data.DataLoader(
         val_dataset,
         batch_size=batchsize_eval, shuffle=False,
-        num_workers=8, pin_memory=True)
+        num_workers=8, pin_memory=True, drop_last=True)
 
     return train_loader, val_loader
 
