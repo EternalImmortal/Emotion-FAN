@@ -230,7 +230,6 @@ def validate(val_loader, model):
         if at_type == 'self-attention':
             pred_score = model(vm=weightmean_sourcefc, phrase='eval', AT_level='pred')
         if at_type == 'self_relation-attention':
-            print(output_store_fc.shape)
             pred_score = model(vectors=output_store_fc, vm=weightmean_sourcefc, alphas_from1=output_alpha,
                                index_matrix=index_matrix, phrase='eval', AT_level='second_level')
 
