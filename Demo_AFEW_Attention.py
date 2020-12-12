@@ -26,7 +26,7 @@ parser.add_argument('--print-freq', '-p', default=200, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('-e', '--evaluate', default=False, dest='evaluate', action='store_true',
                     help='evaluate model on validation set')
-parser.add_argument('--batch_size', default='8')
+parser.add_argument('--batch_size', default='8', type=int)
 parser.add_argument('--train_root', default='/home/renjie/dataset/CK+/cohn-kanade-images')
 parser.add_argument('--train_index', default='./Data/CK+_Fold1.txt')
 parser.add_argument('--validation_root', default='/home/renjie/dataset/CK+/cohn-kanade-images')
