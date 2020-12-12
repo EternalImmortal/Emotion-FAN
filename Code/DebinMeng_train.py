@@ -1,4 +1,4 @@
-#coding=utf-8
+# coding=utf-8
 import os, sys, shutil
 import random as rd
 from PIL import Image
@@ -11,10 +11,12 @@ from torch.autograd import Variable
 from torch.nn.modules.loss import _WeightedLoss
 import pdb
 import csv
+
 try:
     import cPickle as pickle
 except:
     import pickle
+
 
 def load_imgs_tsn(video_root, video_list, rectify_label):
     imgs_first = list()
@@ -40,7 +42,6 @@ def load_imgs_tsn(video_root, video_list, rectify_label):
 
             if int(img_count) > 3:
                 for i in range(img_count):
-
                     random_select_first = random.randint(0, num_per_part)
                     random_select_second = random.randint(num_per_part, num_per_part * 2)
                     random_select_third = random.randint(2 * num_per_part, len(img_lists) - 1)
@@ -100,14 +101,13 @@ def load_imgs_total_frame(video_root, video_list, rectify_label):
         # index = index.astype(int)
     return imgs_first, index
 
-class VideoDataset(data.Dataset):
-    def __init__(self, video_root, video_list, rectify_label=None, transform=None, csv = False):
 
+class VideoDataset(data.Dataset):
+    def __init__(self, video_root, video_list, rectify_label=None, transform=None, csv=False):
         self.imgs_first, self.index = load_imgs_total_frame(video_root, video_list, rectify_label)
         self.transform = transform
 
     def __getitem__(self, index):
-
         path_first, target_first = self.imgs_first[index]
         img_first = Image.open(path_first).convert("RGB")
         if self.transform is not None:
@@ -118,12 +118,13 @@ class VideoDataset(data.Dataset):
     def __len__(self):
         return len(self.imgs_first)
 
-# 
+
+#
 class TripleImageDataset(data.Dataset):
     def __init__(self, video_root, video_list, rectify_label=None, transform=None):
 
         self.imgs_first, self.imgs_second, self.imgs_third, self.index = load_imgs_tsn(video_root, video_list,
-                                                                                           rectify_label)
+                                                                                       rectify_label)
         self.transform = transform
 
     def __getitem__(self, index):

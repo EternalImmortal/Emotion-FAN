@@ -26,6 +26,10 @@ parser.add_argument('--print-freq', '-p', default=200, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('-e', '--evaluate', default=False, dest='evaluate', action='store_true',
                     help='evaluate model on validation set')
+parser.add_argument('--train_root', default='')
+parser.add_argument('--train_index', default='./Data/CK+_Fold1.txt')
+parser.add_argument('--validation_root', default='')
+parser.add_argument('--validation_index', default='./Data/CK+_Fold2.txt')
 
 best_prec1 = 0
 
@@ -39,12 +43,20 @@ def main():
 
     print('learning rate:', args.lr)
     ''' Load data '''
-    arg_rootTrain = './Data/Train'
-    arg_listTrain = './Data/list_train.txt'
+    # arg_rootTrain = './Data/Train'
+    # arg_listTrain = './Data/list_train.txt'
+    # arg_batchsize_train= 48
+    #
+    # arg_rooteval = './Data/Val'
+    # arg_listeval = './Data/list_eval.txt'
+    # arg_batchsize_eval= 64
+
+    arg_rootTrain = '/home/renjie/dataset/CK+/cohn-kanade-images'
+    arg_listTrain = './Data/CK+_Fold1.txt'
     arg_batchsize_train= 48
 
-    arg_rooteval = './Data/Val'
-    arg_listeval = './Data/list_eval.txt'
+    arg_rooteval = '/home/renjie/dataset/CK+/cohn-kanade-images'
+    arg_listeval = './Data/CK+_Fold2.txt'
     arg_batchsize_eval= 64
 
     train_loader, val_loader = load_materials.LoadAFEW(arg_rootTrain, arg_listTrain, arg_batchsize_train, arg_rooteval, arg_listeval, arg_batchsize_eval)

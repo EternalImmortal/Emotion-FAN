@@ -1,6 +1,7 @@
 import os
 import torch
 
+
 def accuracy(output, target, topk=(1,)):
     """Computes the precision@k for the specified values of k"""
     maxk = max(topk)
@@ -23,7 +24,7 @@ def adjust_learning_rate(optimizer, epoch, learning_rate, end_epoch):
         for param_group in optimizer.param_groups:
             param_group['lr'] *= 0.2
 
-        learning_rate = learning_rate* 0.2
+        learning_rate = learning_rate * 0.2
         print('Adjust_learning_rate ' + str(epoch))
         print('New_LearningRate: {}'.format(learning_rate))
 
@@ -46,12 +47,12 @@ class AverageMeter(object):
         self.count += n
         self.avg = self.sum / self.count
 
-def save_checkpoint(state, at_type=''):
 
+def save_checkpoint(state, at_type=''):
     if not os.path.exists('./model'):
         os.makedirs('./model')
 
     epoch = state['epoch']
-    save_dir = './model/'+at_type+'_' + str(epoch) + '_' + str(round(float(state['prec1']), 4))
+    save_dir = './model/' + at_type + '_' + str(epoch) + '_' + str(round(float(state['prec1']), 4))
     torch.save(state, save_dir)
     print(save_dir)
