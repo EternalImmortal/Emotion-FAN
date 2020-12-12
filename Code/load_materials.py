@@ -48,7 +48,7 @@ def Load_CKPlus(root_train, list_train, batchsize_train, root_eval, list_eval, b
         video_root=root_train,
         video_list=list_train,
         rectify_label=CK_label,
-        transform=transforms.Compose([transforms.Resize((400, 400)),
+        transform=transforms.Compose([transforms.Resize((480, 480)),
                                       transforms.ToTensor()]),
     )
 
@@ -56,7 +56,7 @@ def Load_CKPlus(root_train, list_train, batchsize_train, root_eval, list_eval, b
         video_root=root_eval,
         video_list=list_eval,
         rectify_label=CK_label,
-        transform=transforms.Compose([transforms.Resize((400, 400)),
+        transform=transforms.Compose([transforms.Resize((480, 480)),
                                       transforms.ToTensor()]),
         csv=False)
 
