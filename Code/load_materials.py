@@ -11,7 +11,7 @@ cate2label = {'CK+': {0: 'Happy', 1: 'Angry', 2: 'Disgust', 3: 'Fear', 4: 'Sad',
 
               'AFEW': {0: 'Happy', 1: 'Angry', 2: 'Disgust', 3: 'Fear', 4: 'Sad', 5: 'Neutral', 6: 'Surprise',
                        'Angry': 1, 'Disgust': 2, 'Fear': 3, 'Happy': 0, 'Neutral': 5, 'Sad': 4, 'Surprise': 6}}
-cate2label = cate2label['AFEW']
+AFEW_label = cate2label['AFEW']
 CK_label = cate2label['CK+']
 
 
@@ -19,14 +19,14 @@ def LoadAFEW(root_train, list_train, batchsize_train, root_eval, list_eval, batc
     train_dataset = DebinMeng_train.TripleImageDataset(
         video_root=root_train,
         video_list=list_train,
-        rectify_label=cate2label,
+        rectify_label=AFEW_label,
         transform=transforms.Compose([transforms.ToTensor()]),
     )
 
     val_dataset = DebinMeng_train.VideoDataset(
         video_root=root_eval,
         video_list=list_eval,
-        rectify_label=cate2label,
+        rectify_label=AFEW_label,
         transform=transforms.Compose([transforms.ToTensor()]),
         csv=False)
 
