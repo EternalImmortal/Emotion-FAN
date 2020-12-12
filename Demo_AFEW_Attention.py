@@ -10,10 +10,10 @@ import torch.optim
 import torch.utils.data
 from Code import load_materials, util, Model
 
-#os.environ['CUDA_VISIBLE_DEVICES'] = '5'
+# os.environ['CUDA_VISIBLE_DEVICES'] = '5'
 parser = argparse.ArgumentParser(description='PyTorch CelebA Training')
 parser.add_argument('--at_type', '--attention', default=1, type=int, metavar='N',
-                    help= '0 is self-attention; 1 is self + relation-attention')
+                    help='0 is self-attention; 1 is self + relation-attention')
 parser.add_argument('--epochs', default=180, type=int, metavar='N',
                     help='number of total epochs to run')
 parser.add_argument('--lr', '--learning-rate', default=4e-6, type=float,
@@ -39,6 +39,7 @@ args = parser.parse_args()
 at_type = ['self-attention', 'self_relation-attention'][args.at_type]
 print('The attention is ' + at_type)
 
+
 def main():
     global args, best_prec1
 
@@ -54,13 +55,14 @@ def main():
 
     arg_rootTrain = args.train_root
     arg_listTrain = args.train_index
-    arg_batchsize_train= args.batch_size
+    arg_batchsize_train = args.batch_size
 
     arg_rooteval = args.validation_root
     arg_listeval = args.validation_index
-    arg_batchsize_eval= args.batch_size
+    arg_batchsize_eval = args.batch_size
 
-    train_loader, val_loader = load_materials.Load_CKPlus(arg_rootTrain, arg_listTrain, arg_batchsize_train, arg_rooteval, arg_listeval, arg_batchsize_eval)
+    train_loader, val_loader = load_materials.Load_CKPlus(arg_rootTrain, arg_listTrain, arg_batchsize_train,
+                                                          arg_rooteval, arg_listeval, arg_batchsize_eval)
 
     ''' Load model '''
     _structure = Model.resnet18_AT(at_type=at_type)
@@ -99,6 +101,7 @@ def main():
         else:
             print('Model too bad & not save')
 
+
 def train(train_loader, model, criterion, optimizer, epoch):
     global record_
     batch_time = util.AverageMeter()
@@ -114,16 +117,17 @@ def train(train_loader, model, criterion, optimizer, epoch):
 
     model.train()
     end = time.time()
-    for i, (input_first, target_first, input_second, target_second, input_third, target_third, index) in enumerate(train_loader):
+    for i, (input_first, target_first, input_second, target_second, input_third, target_third, index) in enumerate(
+            train_loader):
 
         target = target_first.cuda(non_blocking=True)
-        input_var = torch.autograd.Variable(torch.stack([input_first, input_second , input_third], dim=4))
+        input_var = torch.autograd.Variable(torch.stack([input_first, input_second, input_third], dim=4))
         target_var = torch.autograd.Variable(target)
         # compute output
         ''' model & full_model'''
         pred_score = model(input_var)
 
-        loss = criterion(pred_score,target_var)
+        loss = criterion(pred_score, target_var)
         loss = loss.sum()
         #
         output_store_fc.append(pred_score)
@@ -170,7 +174,8 @@ def train(train_loader, model, criterion, optimizer, epoch):
 
     prec_video = util.accuracy(pred_matrix_fc.cpu(), target_vector.cpu(), topk=(1,))
     topVideo.update(prec_video[0], i + 1)
-    print(' *Prec@Video {topVideo.avg:.3f}   *Prec@Frame {topframe.avg:.3f} '.format(topVideo=topVideo, topframe=topframe))
+    print(' *Prec@Video {topVideo.avg:.3f}   *Prec@Frame {topframe.avg:.3f} '.format(topVideo=topVideo,
+                                                                                     topframe=topframe))
 
 
 def validate(val_loader, model):
@@ -182,7 +187,7 @@ def validate(val_loader, model):
     model.eval()
     end = time.time()
     output_store_fc = []
-    output_alpha    = []
+    output_alpha = []
     target_store = []
     index_vector = []
     with torch.no_grad():
@@ -191,7 +196,7 @@ def validate(val_loader, model):
             target = target.cuda(non_blocking=True)
             input_var = torch.autograd.Variable(input_var)
             ''' model & full_model'''
-            f, alphas = model(input_var, phrase = 'eval')
+            f, alphas = model(input_var, phrase='eval')
 
             pred_score = 0
             output_store_fc.append(f)
@@ -211,12 +216,12 @@ def validate(val_loader, model):
         index_matrix = torch.stack(index_matrix, dim=0).cuda(non_blocking=True).float()  # [21570]  --->  [380, 21570]
 
         output_store_fc = torch.cat(output_store_fc, dim=0)  # [256,7] ... [256,7]  --->  [21570, 7]
-        output_alpha    = torch.cat(output_alpha, dim=0)     # [256,1] ... [256,1]  --->  [21570, 1]
+        output_alpha = torch.cat(output_alpha, dim=0)  # [256,1] ... [256,1]  --->  [21570, 1]
         target_store = torch.cat(target_store, dim=0).float()  # [256] ... [256]  --->  [21570]
 
         ''' keywords: mean_fc ; weight_sourcefc; sum_alpha; weightmean_sourcefc '''
-        weight_sourcefc = output_store_fc.mul(output_alpha)   #[21570,512] * [21570,1] --->[21570,512]
-        sum_alpha = index_matrix.mm(output_alpha) # [380,21570] * [21570,1] -> [380,1]
+        weight_sourcefc = output_store_fc.mul(output_alpha)  # [21570,512] * [21570,1] --->[21570,512]
+        sum_alpha = index_matrix.mm(output_alpha)  # [380,21570] * [21570,1] -> [380,1]
         weightmean_sourcefc = index_matrix.mm(weight_sourcefc).div(sum_alpha)
 
         target_vector = index_matrix.mm(target_store.unsqueeze(1)).squeeze(1).div(
@@ -225,7 +230,9 @@ def validate(val_loader, model):
         if at_type == 'self-attention':
             pred_score = model(vm=weightmean_sourcefc, phrase='eval', AT_level='pred')
         if at_type == 'self_relation-attention':
-            pred_score  = model(vectors=output_store_fc, vm=weightmean_sourcefc, alphas_from1=output_alpha, index_matrix=index_matrix, phrase='eval', AT_level='second_level')
+            print(output_store_fc.shape)
+            pred_score = model(vectors=output_store_fc, vm=weightmean_sourcefc, alphas_from1=output_alpha,
+                               index_matrix=index_matrix, phrase='eval', AT_level='second_level')
 
         prec_video = util.accuracy(pred_score.cpu(), target_vector.cpu(), topk=(1,))
 
@@ -233,6 +240,7 @@ def validate(val_loader, model):
         print(' *Prec@Video {topVideo.avg:.3f} '.format(topVideo=topVideo))
 
         return topVideo.avg
+
 
 if __name__ == '__main__':
     main()
