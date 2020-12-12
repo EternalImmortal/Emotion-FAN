@@ -26,9 +26,9 @@ parser.add_argument('--print-freq', '-p', default=200, type=int,
                     metavar='N', help='print frequency (default: 10)')
 parser.add_argument('-e', '--evaluate', default=False, dest='evaluate', action='store_true',
                     help='evaluate model on validation set')
-parser.add_argument('--train_root', default='')
+parser.add_argument('--train_root', default='/home/renjie/dataset/CK+/cohn-kanade-images')
 parser.add_argument('--train_index', default='./Data/CK+_Fold1.txt')
-parser.add_argument('--validation_root', default='')
+parser.add_argument('--validation_root', default='/home/renjie/dataset/CK+/cohn-kanade-images')
 parser.add_argument('--validation_index', default='./Data/CK+_Fold2.txt')
 
 best_prec1 = 0
@@ -51,12 +51,12 @@ def main():
     # arg_listeval = './Data/list_eval.txt'
     # arg_batchsize_eval= 64
 
-    arg_rootTrain = '/home/renjie/dataset/CK+/cohn-kanade-images'
-    arg_listTrain = './Data/CK+_Fold1.txt'
+    arg_rootTrain = args.train_root
+    arg_listTrain = args.train_index
     arg_batchsize_train= 48
 
-    arg_rooteval = '/home/renjie/dataset/CK+/cohn-kanade-images'
-    arg_listeval = './Data/CK+_Fold2.txt'
+    arg_rooteval = args.validation_root
+    arg_listeval = args.validation_index
     arg_batchsize_eval= 64
 
     train_loader, val_loader = load_materials.Load_CKPlus(arg_rootTrain, arg_listTrain, arg_batchsize_train, arg_rooteval, arg_listeval, arg_batchsize_eval)
