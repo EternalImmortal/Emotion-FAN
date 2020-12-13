@@ -31,6 +31,7 @@ parser.add_argument('--train_root', default='/home/renjie/dataset/CK+/cohn-kanad
 parser.add_argument('--train_index', default='./Data/CK+_Fold2_10.txt')
 parser.add_argument('--validation_root', default='/home/renjie/dataset/CK+/cohn-kanade-images')
 parser.add_argument('--validation_index', default='./Data/CK+_Fold1.txt')
+parser.add_argument('--model_params_path', default='./Parameter/Resnet18_FER+_pytorch.pth.tar')
 
 best_prec1 = 0
 
@@ -66,7 +67,7 @@ def main():
 
     ''' Load model '''
     _structure = Model.resnet18_AT(at_type=at_type)
-    _parameterDir = './Parameter/Resnet18_FER+_pytorch.pth.tar'
+    _parameterDir = args.model_params_path
     model = load_materials.LoadParameter(_structure, _parameterDir)
 
     ''' Loss & Optimizer '''
